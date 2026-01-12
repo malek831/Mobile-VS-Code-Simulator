@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mobile VS Code Simulator</title>
+<style>
+body {
+  margin: 0;
+  font-family: monospace;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #1e1e1e;
+  color: #d4d4d4;
+}
+header {
+  background: #007acc;
+  color: white;
+  padding: 5px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+header img {
+  height: 30px;
+}
+#editor-container {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+#sidebar {
+  width: 60px;
+  background: #252526;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 10px;
+}
+#sidebar button {
+  background: none;
+  border: none;
+  margin: 10px 0;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 5px;
+}
+#sidebar img {
+  width: 30px;
+  height: 30px;
+}
+#main-editor {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+textarea {
+  flex: 1;
+  width: 100%;
+  background: #1e1e1e;
+  color: #d4d4d4;
+  border: none;
+  padding: 10px;
+  resize: none;
+  font-family: monospace;
+  font-size: 16px;
+}
+#iframe-container {
+  flex: 1;
+  border-top: 2px solid #007acc;
+}
+iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+#bottom-bar {
+  background: #007acc;
+  display: flex;
+  justify-content: space-around;
+  padding: 5px 0;
+}
+#bottom-bar button {
+  background: #005f99;
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <span>Mobile VS Code</span>
+  <img src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Visual_Studio_Code_1.35_icon.svg" alt="VS Code Logo">
+</header>
+
+<div id="editor-container">
+  <div id="sidebar">
+    <button title="New File" onclick="newFile()"><img src="https://cdn-icons-png.flaticon.com/512/1828/1828817.png" alt="New File"></button>
+    <button title="Save" onclick="saveFile()"><img src="https://cdn-icons-png.flaticon.com/512/724/724933.png" alt="Save"></button>
+    <button title="Settings" onclick="openSettings()"><img src="https://cdn-icons-png.flaticon.com/512/3524/3524630.png" alt="Settings"></button>
+  </div>
+
+  <div id="main-editor">
+    <textarea id="code" placeholder="اكتب هنا HTML/CSS/JS..."></textarea>
+    <div id="iframe-container">
+      <iframe id="output"></iframe>
+    </div>
+  </div>
+</div>
+
+<div id="bottom-bar">
+  <button onclick="runCode()">Run ▶️</button>
+  <button onclick="clearCode()">Clear 🧹</button>
+</div>
+
+<script>
+// تشغيل الكود في iframe
+function runCode() {
+  const code = document.getElementById('code').value;
+  const output = document.getElementById('output');
+  output.srcdoc = code;
+}
+
+// مسح الكود
+function clearCode() {
+  document.getElementById('code').value = '';
+  document.getElementById('output').srcdoc = '';
+}
+
+// زر New File
+function newFile() {
+  if(confirm("هل تريد فتح ملف جديد ومسح كل الكود الحالي؟")) {
+    document.getElementById('code').value = '';
+    document.getElementById('output').srcdoc = '';
+  }
+}
+
+// زر Save
+function saveFile() {
+  const code = document.getElementById('code').value;
+  const blob = new Blob([code], { type: "text/html" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "my_code.html";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// زر Settings (نافذة بسيطة)
+function openSettings() {
+  alert("Settings Placeholder! هنا ممكن تضيف إعدادات المحاكي لاحقًا.");
+}
+</script>
+
+</body>
+</html>
